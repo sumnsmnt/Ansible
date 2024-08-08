@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+  - name: Create EC2 instances
+    amazon.aws.ec2_instance:
+      name: "{{ item.name }}"
+      key_name: "vmrhel"
+      # vpc_subnet_id: subnet-012744e41e8088axx
+      instance_type: t2.micro
+      security_group: default
+      region: us-east-1
+      aws_access_key: "{{ec2_access_key}}"
+      aws_secret_key: "{{ec2_secret_key}}"
+      network:
+       assign_public_ip: true
+      image_id: "{{ item.image }}"
+
+    loop:
+      - { image: "ami-04a81a99f5ec58529", name: "manage-node-1" }
+      - { image: "ami-04a81a99f5ec58529", name: "manage-node-2" }
+      - { image: "ami-04a81a99f5ec58529", name: "manage-node-3" }
